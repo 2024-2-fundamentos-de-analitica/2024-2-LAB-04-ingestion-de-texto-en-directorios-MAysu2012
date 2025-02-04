@@ -5,6 +5,77 @@
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
 
+import os
+import pandas as pd
+import zipfile
+
+
+ruta_zip = "files/input.zip"
+ruta_input = "files/input"
+
+if not os.path.exists(ruta_input):
+    with zipfile.ZipFile(ruta_zip, 'r') as archivo_zip:
+        archivo_zip.extractall("files/")
+
+ruta_train_neg = "files/input/train/negative"
+ruta_train_neu = "files/input/train/neutral"
+ruta_train_pos = "files/input/train/positive"
+
+archivos_neg = os.listdir(ruta_train_neg)
+archivos_neu = os.listdir(ruta_train_neu)
+archivos_pos = os.listdir(ruta_train_pos)
+
+frases_train = []
+sentimientos_train = []
+
+for archivo in archivos_neg:
+    with open(f"{ruta_train_neg}/{archivo}", "r", encoding="utf-8") as f:
+        frases_train.append(f.read())
+        sentimientos_train.append("negative")
+
+for archivo in archivos_neu:
+    with open(f"{ruta_train_neu}/{archivo}", "r", encoding="utf-8") as f:
+        frases_train.append(f.read())
+        sentimientos_train.append("neutral")
+
+for archivo in archivos_pos:
+    with open(f"{ruta_train_pos}/{archivo}", "r", encoding="utf-8") as f:
+        frases_train.append(f.read())
+        sentimientos_train.append("positive")
+
+data_train = pd.DataFrame({"phrase": frases_train, "target": sentimientos_train})
+data_train.to_csv("files/output/train_dataset.csv", index=False)
+
+
+ruta_test_neg = "files/input/test/negative"
+ruta_test_neu = "files/input/test/neutral"
+ruta_test_pos = "files/input/test/positive"
+
+archivos_neg = os.listdir(ruta_test_neg)
+archivos_neu = os.listdir(ruta_test_neu)
+archivos_pos = os.listdir(ruta_test_pos)
+
+frases_test = []
+sentimientos_test = []
+
+for archivo in archivos_neg:
+    with open(f"{ruta_test_neg}/{archivo}", "r", encoding="utf-8") as f:
+        frases_test.append(f.read())
+        sentimientos_test.append("negative")
+
+for archivo in archivos_neu:
+    with open(f"{ruta_test_neu}/{archivo}", "r", encoding="utf-8") as f:
+        frases_test.append(f.read())
+        sentimientos_test.append("neutral")
+
+for archivo in archivos_pos:
+    with open(f"{ruta_test_pos}/{archivo}", "r", encoding="utf-8") as f:
+        frases_test.append(f.read())
+        sentimientos_test.append("positive")
+
+data_test = pd.DataFrame({"phrase": frases_test, "target": sentimientos_test})
+data_test.to_csv("files/output/test_dataset.csv", index=False)
+
 
 def pregunta_01():
     """
@@ -71,3 +142,4 @@ def pregunta_01():
 
 
     """
+
